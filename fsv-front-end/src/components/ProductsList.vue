@@ -1,6 +1,11 @@
 <template>
   <div>
-    <ProductsListItem v-for="item in productList" :key="item.id" :item="item" />
+    <ProductsListItem
+      v-for="item in productList"
+      :key="item.id"
+      :item="item"
+      @remove-from-list="removeFromCart"
+    />
   </div>
 </template>
 
@@ -13,6 +18,11 @@ export default {
     ProductsListItem,
   },
   props: ["productList"],
+  methods: {
+    removeFromCart(event) {
+      this.$emit("remove-from-cart", event);
+    },
+  },
 };
 </script>
 

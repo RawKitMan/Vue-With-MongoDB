@@ -5,7 +5,9 @@
       <h3>{{ item.name }}</h3>
       <p>${{ item.price }}</p>
     </div>
-    <button class="remove-button">Remove From Cart</button>
+    <button class="remove-button" @click="removeFromCart">
+      Remove From Cart
+    </button>
   </div>
 </template>
 
@@ -13,6 +15,11 @@
 export default {
   name: "ProductsListItem",
   props: ["item"],
+  methods: {
+    removeFromCart() {
+      this.$emit("remove-from-list", this.$props.item.id);
+    },
+  },
 };
 </script>
 <style scoped>

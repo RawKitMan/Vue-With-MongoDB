@@ -1,14 +1,14 @@
 <template>
   <div id="page-wrap">
     <h1>Shopping Cart</h1>
-    <ProductsList :productList="cartItems" />
+    <ProductsList :productList="cartItems" @remove-from-cart="removeFromCart" />
     <h3 id="total-price">Total: ${{ totalPrice }}</h3>
     <button id="checkout-button">Proceed to Checkout</button>
   </div>
 </template>
 
 <script>
-import { cartItems } from "../fake-data";
+import axios from "axios";
 import ProductsList from "../components/ProductsList.vue";
 
 export default {
@@ -18,13 +18,25 @@ export default {
   },
   data() {
     return {
-      cartItems,
+      cartItems: [],
     };
   },
   computed: {
     totalPrice() {
       return this.cartItems.reduce((sum, item) => sum + Number(item.price), 0);
     },
+  },
+  methods: {
+    async removeFromCart(productId) {
+      const { data: cartItems } = await axios.delete(
+        `/api/users/12345/cart/${productId}`
+      );
+      this.cartItems = cartItems;
+    },
+  },
+  async created() {
+    const { data: cartItems } = await axios.get("/api/users/12345/cart");
+    this.cartItems = cartItems;
   },
 };
 </script>
